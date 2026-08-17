@@ -8,16 +8,17 @@ function ThemeProvider({
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-      {...props}
-    >
-      <ThemeHotkey />
-      {children}
-    </NextThemesProvider>
+    <>
+      <NextThemesProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+        {...props}
+      >
+        <ThemeHotkey />
+      </NextThemesProvider>
+    </>
   )
 }
 
