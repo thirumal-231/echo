@@ -1,53 +1,40 @@
-import { add } from "@workspace/math/add"
-import { Button } from "@workspace/ui/components/button"
+"use client"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "@workspace/backend/_generated/api"
+import { useState } from "react"
 
 export default function Page() {
+  const [userName, setUserName] = useState("")
+
+  const users = useQuery(api.users.getMany)
+  const addUser = useMutation(api.users.add)
+
+  const handleNameChange = async () => {
+    if (!userName.trim()) return
+    await addUser({ name: userName.trim() })
+    setUserName("")
+  }
+
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger
-          render={<Button variant="outline">Open Dialog</Button>}
+    <div className="flex min-h-svh flex-col items-center justify-center">
+      <p>app/web</p>
+      <div className="flex flex-row gap-2">
+        <input
+          type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          className="bg-gray-400"
         />
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription>
-          </DialogHeader>
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-            </Field>
-            <Field>
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
-            </Field>
-          </FieldGroup>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline">Cancel</Button>} />
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
-    </Dialog>
+        <button className="bg-green-500 p-2" onClick={handleNameChange}>
+          Add
+        </button>
+      </div>
+      <div className="mx-auto w-full max-w-sm">
+        {" "}
+        {users?.map((user) => (
+          <p key={user._id}>{user.name}</p>
+        ))}
+      </div>
+    </div>
   )
 }
-
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@workspace/ui/components/dialog"
-import { Field, FieldGroup } from "@workspace/ui/components/field"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
-
-export function DialogDemo() {}

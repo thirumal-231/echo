@@ -1,13 +1,16 @@
-import { Button } from "@workspace/ui/components/button"
+"use client"
+import { useQuery } from "convex/react"
+import { api } from "@workspace/backend/_generated/api"
 
 export default function Page() {
+  const users = useQuery(api.users.getMany)
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Hello World! Widget</h1>
-          <Button className="mt-2">Button</Button>
-        </div>
+    <div className="flex min-h-svh flex-col items-center justify-center">
+      <p>app/widget</p>
+      <div className="mx-auto w-full max-w-sm">
+        {users?.map((user) => (
+          <p key={user._id}>{user.name}</p>
+        ))}
       </div>
     </div>
   )
